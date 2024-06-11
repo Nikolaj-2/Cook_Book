@@ -1,0 +1,17 @@
+{
+    "name": "jajecznica",
+    "ingredients": [
+        {
+            "name": "Majonez",
+            "protein": 4.0,
+            "fat": 40.0,
+            "carbohydrates": 20.0
+        },
+        {
+            "name": "jajko x3",
+            "protein": 18.0,
+            "fat": 30.0,
+            "carbohydrates": 12.0
+        }
+    ]
+}
