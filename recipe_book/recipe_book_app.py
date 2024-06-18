@@ -1,4 +1,3 @@
-# recipe_book/recipe_book_app.py
 import tkinter as tk
 from tkinter import ttk, messagebox
 from .recipe_book import RecipeBook
@@ -6,15 +5,17 @@ from .ingredient import Ingredient
 from .recipe import Recipe
 import os
 
+# Klasa reprezentująca aplikację książki kucharskiej.
 class RecipeBookApp:
     def __init__(self, root):
-        self.root = root
-        self.root.title("Książka Kucharska")
-        self.recipe_book = RecipeBook("recipes", "charts")
+        self.root = root  # Główne okno aplikacji.
+        self.root.title("Książka Kucharska")  # Tytuł okna aplikacji.
+        self.recipe_book = RecipeBook("recipes", "charts")  # Inicjalizacja książki kucharskiej.
 
-        self.setup_ui()
+        self.setup_ui()  # Ustawienie interfejsu użytkownika.
 
     def setup_ui(self):
+        # Konfiguracja interfejsu użytkownika.
         frame = ttk.Frame(self.root, padding="10")
         frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
 
@@ -22,7 +23,7 @@ class RecipeBookApp:
         self.recipe_name = ttk.Entry(frame, width=30)
         self.recipe_name.grid(row=0, column=1, sticky=(tk.W, tk.E))
 
-        self.ingredients = []
+        self.ingredients = []  # Lista składników.
         ttk.Button(frame, text="Dodaj Składnik", command=self.add_ingredient).grid(row=0, column=2, sticky=tk.W)
         self.ingredient_list = tk.Listbox(frame, height=10, width=50)
         self.ingredient_list.grid(row=1, column=0, columnspan=2, sticky=(tk.W, tk.E))
@@ -35,15 +36,17 @@ class RecipeBookApp:
         self.recipe_list = tk.Listbox(frame, height=10, width=50)
         self.recipe_list.grid(row=3, column=0, columnspan=3, sticky=(tk.W, tk.E))
 
-        self.load_recipes()
+        self.load_recipes()  # Załadowanie listy przepisów.
 
     def load_recipes(self):
+        # Załadowanie przepisów z katalogu.
         self.recipe_list.delete(0, tk.END)
         for filename in os.listdir("recipes"):
             if filename.endswith(".json"):
                 self.recipe_list.insert(tk.END, filename[:-5])
 
     def add_ingredient(self):
+        # Dodanie składnika do przepisu.
         top = tk.Toplevel(self.root)
         top.title("Dodaj Składnik")
 
@@ -64,6 +67,7 @@ class RecipeBookApp:
         carbs_entry.grid(row=3, column=1, sticky=(tk.W, tk.E))
 
         def on_add():
+            # Akcja dodania składnika.
             name = name_entry.get().strip()
             protein = float(protein_entry.get().strip())
             fat = float(fat_entry.get().strip())
@@ -77,12 +81,14 @@ class RecipeBookApp:
         ttk.Button(top, text="Dodaj", command=on_add).grid(row=4, column=1, sticky=tk.W)
 
     def remove_ingredient(self):
+        # Usunięcie składnika z przepisu.
         selected = self.ingredient_list.curselection()
         if selected:
             self.ingredients.pop(selected[0])
             self.ingredient_list.delete(selected[0])
 
     def add_recipe(self):
+        # Dodanie przepisu do książki kucharskiej.
         name = self.recipe_name.get().strip()
         if name and self.ingredients:
             recipe = Recipe(name, self.ingredients)
@@ -93,6 +99,7 @@ class RecipeBookApp:
             messagebox.showwarning("Błąd", "Nazwa przepisu i składniki nie mogą być puste!")
 
     def remove_recipe(self):
+        # Usunięcie przepisu z książki kucharskiej.
         selected = self.recipe_list.curselection()
         if selected:
             name = self.recipe_list.get(selected[0])
@@ -103,6 +110,7 @@ class RecipeBookApp:
             messagebox.showwarning("Błąd", "Wybierz przepis do usunięcia!")
 
     def find_recipe(self):
+        # Wyszukanie przepisu w książce kucharskiej.
         name = self.recipe_name.get().strip()
         if name:
             recipe = self.recipe_book.find_recipe(name)
@@ -116,6 +124,7 @@ class RecipeBookApp:
             messagebox.showwarning("Błąd", "Nazwa przepisu nie może być pusta!")
 
     def show_recipe_details(self, recipe):
+        # Wyświetlenie szczegółów przepisu.
         top = tk.Toplevel(self.root)
         top.title(f"Przepis: {recipe.name}")
 
